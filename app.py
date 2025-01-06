@@ -3,7 +3,7 @@ from flask_cors import CORS
 import os
 from dotenv import load_dotenv
 from supabase import create_client, Client # type: ignore
-import json
+
 
 load_dotenv()
 
@@ -14,24 +14,7 @@ supabase: Client = create_client(url, key)
 app = Flask(__name__)
 
 # Configure CORS with specific options
-CORS(app, resources={
-    r"/*": {
-        "origins": ["http://localhost:5173", "http://localhost:4173"],  # Add your frontend URLs
-        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        "allow_headers": ["Content-Type", "Authorization"],
-        "supports_credentials": True
-    }
-})
-
-# Add CORS headers to all responses
-@app.after_request
-def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:5173')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-    response.headers.add('Access-Control-Allow-Credentials', 'true')
-    return response
-
+CORS(app)
 
 @app.route("/")
 def root():

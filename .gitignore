@@ -1,6 +1,5 @@
 .venv
 .env
 .vscode
-requirements.txt
-vercel.json
+
 
