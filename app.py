@@ -12,7 +12,26 @@ key = os.getenv("SUPABASE_KEY")
 
 supabase: Client = create_client(url, key)
 app = Flask(__name__)
-CORS(app)
+
+# Configure CORS with specific options
+CORS(app, resources={
+    r"/*": {
+        "origins": ["http://localhost:5173", "http://localhost:4173"],  # Add your frontend URLs
+        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization"],
+        "supports_credentials": True
+    }
+})
+
+# Add CORS headers to all responses
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:5173')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
+
 
 @app.route("/")
 def root():
